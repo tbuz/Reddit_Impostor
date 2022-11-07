@@ -17,7 +17,7 @@
 
 The following data is based on the 500 most recent posts as of writing this document and are fetched using `/scripts/pushshift_fetcher.py`.
 
-| **Subreddit**        |    Type     | Avg. Title Length | Link Likelihood | Image Likelihood | Selftext Likelihood | Avg. Selftext Length |
+| Subreddit            |    Type     | Avg. Title Length | Link Likelihood | Image Likelihood | Selftext Likelihood | Avg. Selftext Length |
 | -------------------- | :---------: | ----------------: | --------------: | ---------------: | ------------------: | -------------------: |
 | **r/todayilearned**  | Non-Fiction |           136.0 W |          99.6 % |            0.4 % |               0.0 % |                0.0 W |
 | **r/Showerthoughts** |    Mixed    |            88.2 W |          97.6 % |            0.0 % |              15.6 % |                5.3 W |
