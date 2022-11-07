@@ -2,16 +2,16 @@
 
 ## Subreddits
 
-- **r/todayilearned**: TODO
-- **r/Showerthoughts**: TODO
-- **r/Jokes**: TODO
-- **r/LifeProTips**: TODO
-- **r/AskReddit**: TODO
-- **r/AskScience**: TODO
-- **r/stories**: TODO
-- **r/news**: TODO
-- **r/worldnews**: TODO
-- **r/politics**: TODO
+- **r/todayilearned:** TODO
+- **r/Showerthoughts:** TODO
+- **r/Jokes:** TODO
+- **r/LifeProTips:** TODO
+- **r/AskReddit:** TODO
+- **r/AskScience:** TODO
+- **r/stories:** TODO
+- **r/news:** TODO
+- **r/worldnews:** TODO
+- **r/politics:** TODO
 
 ## Table Comparison
 
