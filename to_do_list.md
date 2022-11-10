@@ -11,13 +11,12 @@
   - ~~r/AskScience~~
   - ~~r/stories~~
   - ~~r/news, r/worldnews, r/politics~~
-  - r/books
-  - r/explainlikeimfive
-  - r/confession
-  - r/WritingPrompts
-  - r/personalfinance
-  - r/confession
-  - r/tifu
+  - ~~r/books~~
+  - ~~r/explainlikeimfive~~
+  - ~~r/confession~~
+  - ~~r/WritingPrompts~~
+  - ~~r/personalfinance~~
+  - ~~r/tifu~~
   - ~~=> Can you compare these in a table? What are important criteria to differentiate them?~~
 - ~~Research: What are Word Embeddings? (Bag of Words, CountVectorizer, Word2Vec)~~
 - ~~Research: Which language models are relevant / interesting?~~
