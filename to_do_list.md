@@ -2,6 +2,24 @@
 
 ## 1. Preparation & Research
 
+- ~~Research: Which subreddits are interesting as text sources? (differences regarding length, fictional/non-fictional / facts)~~
+  - ~~r/todayilearned/~~
+  - ~~r/Showerthoughts/~~
+  - ~~r/Jokes/~~
+  - ~~r/LifeProTips/~~
+  - ~~r/AskReddit/~~
+  - ~~r/AskScience/~~
+  - ~~r/stories/~~
+  - ~~r/news, r/worldnews, r/politics~~
+  - ~~=> Can you compare these in a table? What are important criteria to differentiate them?~~
+- ~~Research: What are Word Embeddings? (Bag of Words, CountVectorizer, Word2Vec)~~
+- ~~Research: Which language models are relevant / interesting?~~
+  - ~~Markov Chain~~
+  - ~~RNN/LSTM~~
+  - ~~GPT-(2/3/neo)~~
+  - ~~BERT / Transformers~~
+  - ~~T5~~
+  - ~~XLNet~~
 - Research: Related research on social media bots, text style transfer, Reddit communities, ...
   - Use sources like: Google Scholar, Towardsdatascience, etc.
 - Research & brainstorm: How to evaluate the success of a generated post?
@@ -13,6 +31,9 @@
 ## 2. Dataset Acquisition & Exploration
 
 - Collecting a sufficiently large dataset from selected subreddits
+- ~~Look at Reddit API, Pushshift API~~
+- ~~Pushshift API => Build a script to access the API~~
+- ~~Compare different subreddits (avg word length, how much facts vs. story?, links or selftext, etc) => create table~~
 - ...
 
 ## 3. Model Exploration / Training / Fine-Tuning & Testing
