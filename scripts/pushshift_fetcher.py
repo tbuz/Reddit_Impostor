@@ -1,63 +1,54 @@
 import json
-
+import os.path
+import ndjson
+from datetime import datetime, timedelta
 import requests
-from prettytable import PrettyTable
+from progress.bar import Bar
+
+# Create data output directory if it doesn't exist
+data_dir = 'data'
+if not os.path.exists(data_dir):
+    os.makedirs(data_dir)
 
 # Ask for user input
-subreddit = input("👋 Hello there! Please, enter a subreddit: r/")
+subreddit = input('👋 Hello there! Please, enter a subreddit: r/')
+time_period = int(input('🕒 For what time period do you want to fetch data? (in days): '))
 
-# Make a request to the subreddit using pushshift.io
-print(f"🔍 Searching for posts in r/{subreddit}...")
-response = requests.get(f"https://api.pushshift.io/reddit/search/submission?subreddit={subreddit}&size=500")
+# Store information for subsequent requests
+params = { 'subreddit': subreddit, 'size': 500, 'sort': 'created_utc:desc' }
+last_date = datetime.now()
 
-# Convert the response to JSON
-data = json.loads(response.text)
+# Create a progress bar and show it immediately
+bar = Bar('🔭 Fetching posts', max=time_period)
+bar.start()
 
-# Gather desired data
-total_title_length = 0
-total_selftext_length = 0
-link_count = 0
-image_count = 0
-selftext_count = 0
+# Make requests to pushshift.io until we have all the data
+while datetime.now() - last_date < timedelta(days=time_period):
+    # Make a request to the subreddit using pushshift.io
+    response = requests.get('https://api.pushshift.io/reddit/search/submission', params=params)
+    data = json.loads(response.text)
+    posts = data['data']
 
-for post in data["data"]:
-  # Sum up title and selftext length
-  total_title_length += len(post["title"])
-  total_selftext_length += len(post["selftext"]) if "selftext" in post else 0
+    # If there are no more posts, stop the loop
+    if len(posts) == 0:
+        break
 
-  # Check if the post contains a link
-  if post["url"] != "":
-    link_count += 1
+    # Get the date of the last post
+    new_date = datetime.fromtimestamp(posts[-1]['created_utc'])
 
-  # Check if the post contains an image
-  if "post_hint" in post and post["post_hint"] == "image":
-    image_count += 1
-  
-  # Check if the post contains selftext
-  if "selftext" in post and post["selftext"] != "":
-    selftext_count += 1
+    # Write the data to a file
+    with open(f'{data_dir}/{subreddit}.ndjson', 'a') as f:
+        ndjson.dump(posts, f)
 
-# Calculate averages and percentages
-data_count = len(data["data"])
+    # Update progress bar by the day difference since the last post
+    bar.goto((datetime.now() - new_date).days)
 
-average_title_length = total_title_length / data_count
-average_selftext_length = total_selftext_length / data_count
-link_percentage = link_count / data_count * 100
-image_percentage = image_count / data_count * 100
-selftext_percentage = selftext_count / data_count * 100
+    # Update the last date and the params for the next request
+    last_date = datetime.fromtimestamp(posts[-1]['created_utc'])
+    params['before'] = posts[-1]['created_utc']
 
-# Print the results
-table = PrettyTable()
-table.field_names = ["Metric", "Value"]
-table.align["Metric"] = "l"
-table.align["Value"] = "r"
+# Finish the progress bar
+bar.finish()
 
-table.add_row(["Average title length", f"{average_title_length:.1f} W"])
-table.add_row(["Average selftext length", f"{average_selftext_length:.1f} W"])
-table.add_row(["Link percentage", f"{link_percentage:.1f} %"])
-table.add_row(["Image percentage", f"{image_percentage:.1f} %"])
-table.add_row(["Selftext percentage", f"{selftext_percentage:.1f} %"])
-
-print(table)
-
-print("🚀 Done")
+# Print a message to the user
+print(f'🚀 Done! You can find the data in data/{subreddit}.ndjson.')
