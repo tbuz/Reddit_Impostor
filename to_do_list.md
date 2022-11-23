@@ -38,11 +38,13 @@
   - spacy for embeddings, NER, sentiment analysis, etc. (powerful package) https://spacy.io/
   - SBERT (pre-trained)
   - Is VADER sentiment analysis helpful?
+- Decide on two types of subreddits to work with: easy subreddits (e.g. Jokes, Showerthoughts), and difficult ones (e.g. WritingPrompts, ELI5)
 
 ## 2. Dataset Acquisition & Exploration
 
 - Collecting a sufficiently large dataset from selected subreddits
   - focus on subreddits with text (avoid news etc for now)
+  - scrape top 5 comments per post (regarding score) from comment-driven communities (at least explainlikeimfive)
 - ~~Look at Reddit API, Pushshift API~~
 - ~~Pushshift API => Build a script to access the API~~
 - ~~Compare different subreddits (avg word length, how much facts vs. story?, links or selftext, etc) => create table~~
@@ -53,7 +55,8 @@
 - https://huggingface.co/models for model options
 - Implement pre-trained models
 - How to fine-tune a Language Model like BERT?
-- ...
+- Test pre-trained Text Generation models on specific tasks (e.g. generate joke, showerthought, etc.)
+- Test pre-trained models on more difficult taks (e.g., explainlikeimfive or write story from prompt)
 
 ## 4. Evaluation
 
