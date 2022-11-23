@@ -70,4 +70,5 @@
 ## 5. Additional ideas
 
 - Can we build a model that summarizes top 5 news of the day?
+- Can GAN be used to optimize the models?
 - ...
