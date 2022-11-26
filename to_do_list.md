@@ -28,11 +28,10 @@
   - ~~XLNet~~
 - Research: Related research on social media bots, text style transfer, Reddit communities, ...
   - Use sources like: Google Scholar, Towardsdatascience, etc.
-- Research & brainstorm: How to evaluate the success of a generated post?
-  - How do other researchers measure similar tasks?
-  - Kind of a "Turing Test" - Survey with 10 real and 10 fake posts
-  - Post best posts on subreddit
-  - ...
+- ~~Research & brainstorm: How to evaluate the success of a generated post?~~
+  - ~~How do other researchers measure similar tasks?~~
+  - ~~Kind of a "Turing Test" - Survey with 10 real and 10 fake posts~~
+  - ~~Post best posts on subreddit~~
 - Research Embeddings:
   - What is cosine similarity?
   - spacy for embeddings, NER, sentiment analysis, etc. (powerful package) https://spacy.io/
