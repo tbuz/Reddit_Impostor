@@ -1,7 +1,9 @@
 import json
 import os.path
-import ndjson
+import time
 from datetime import datetime, timedelta
+
+import ndjson
 import requests
 from progress.bar import Bar
 
@@ -25,7 +27,14 @@ bar.start()
 # Make requests to pushshift.io until we have all the data
 while datetime.now() - last_date < timedelta(days=time_period):
     # Make a request to the subreddit using pushshift.io
-    response = requests.get('https://api.pushshift.io/reddit/search/submission', params=params)
+    # If we encounter an error (most likely rate limiting), we will simply try again after a short delay
+    while True:
+        response = requests.get('https://api.pushshift.io/reddit/search/submission', params=params)
+        if response.status_code == 200:
+            break
+        else:
+            time.sleep(10)
+
     data = json.loads(response.text)
     posts = data['data']
 
