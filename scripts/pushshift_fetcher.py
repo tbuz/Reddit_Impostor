@@ -28,7 +28,7 @@ bar.start()
 while datetime.now() - last_date < timedelta(days=time_period):
     while True:
         response = requests.get('https://api.pushshift.io/reddit/search/submission', params=params)
-            # If we get rate limited, wait 30 seconds and try again
+        # If we get rate limited, wait 30 seconds and try again
         if response.status_code == 429:
             time.sleep(30)
         else:
