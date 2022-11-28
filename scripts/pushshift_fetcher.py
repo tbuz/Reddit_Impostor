@@ -26,14 +26,13 @@ bar.start()
 
 # Make requests to pushshift.io until we have all the data
 while datetime.now() - last_date < timedelta(days=time_period):
-    # Make a request to the subreddit using pushshift.io
-    # If we encounter an error (most likely rate limiting), we will simply try again after a short delay
     while True:
         response = requests.get('https://api.pushshift.io/reddit/search/submission', params=params)
-        if response.status_code == 200:
-            break
+            # If we get rate limited, wait 30 seconds and try again
+        if response.status_code == 429:
+            time.sleep(30)
         else:
-            time.sleep(10)
+            break
 
     data = json.loads(response.text)
     posts = data['data']
@@ -47,6 +46,9 @@ while datetime.now() - last_date < timedelta(days=time_period):
 
     # Write the data to a file
     with open(f'{data_dir}/{subreddit}.ndjson', 'a') as f:
+        # If we already have some data, we need to insert a newline
+        if os.path.getsize(f'{data_dir}/{subreddit}.ndjson') > 0:
+            f.write('\n')
         ndjson.dump(posts, f)
 
     # Update progress bar by the day difference since the last post
@@ -55,6 +57,10 @@ while datetime.now() - last_date < timedelta(days=time_period):
     # Update the last date and the params for the next request
     last_date = datetime.fromtimestamp(posts[-1]['created_utc'])
     params['before'] = posts[-1]['created_utc']
+
+    # Currently pushshift allows 120 requests per minute (https://api.pushshift.io/meta)
+    # Therefore, we need to wait 0.5 seconds between requests
+    time.sleep(0.5)
 
 # Finish the progress bar
 bar.finish()
