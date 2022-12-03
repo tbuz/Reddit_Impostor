@@ -8,7 +8,7 @@ import requests
 from progress.bar import Bar
 
 # Create data output directory if it doesn't exist
-data_dir = 'data'
+data_dir = '../data'
 if not os.path.exists(data_dir):
     os.makedirs(data_dir)
 
