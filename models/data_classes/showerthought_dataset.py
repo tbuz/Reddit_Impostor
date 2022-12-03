@@ -18,10 +18,20 @@ class ShowerthoughtDataset(Dataset):
           reader = ndjson.reader(f)
           try:
             for post in reader:
-              showerthought_str = f"{self.begin_of_text_token}{post['title']}{self.end_of_text_token}"
-              self.showerthought_list.append(showerthought_str)
+              if self.__isPostValid(post):
+                showerthought_str = f"{self.begin_of_text_token}{post['title']}{self.end_of_text_token}"
+                self.showerthought_list.append(showerthought_str)
           except json.JSONDecodeError:
             pass
+          
+    def __isPostValid(post):
+      if 'removed_by_category' in post:
+          return False
+      if post['selftext'] != '':
+          return False
+      if "post_hint" in post and post["post_hint"] == "image":
+          return False
+      return True
       
     def __len__(self):
         return len(self.showerthought_list)
