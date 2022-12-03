@@ -47,7 +47,12 @@
 - ~~Look at Reddit API, Pushshift API~~
 - ~~Pushshift API => Build a script to access the API~~
 - ~~Compare different subreddits (avg word length, how much facts vs. story?, links or selftext, etc) => create table~~
-- ...
+- Dataset preprocessing
+  - Filter out irrelevant data
+  - Filter out deleted posts?
+  - Normalize data
+  - Filter out duplicates?
+    - This will be hard to find. Maybe it would work to search for posts of the same author within in a small period of time
 
 ## 3. Model Exploration / Training / Fine-Tuning & Testing
 
