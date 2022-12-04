@@ -24,7 +24,7 @@ class ShowerthoughtDataset(Dataset):
           except json.JSONDecodeError:
             pass
           
-    def __isPostValid(post):
+    def __isPostValid(self, post):
       if 'removed_by_category' in post:
           return False
       if post['selftext'] != '':

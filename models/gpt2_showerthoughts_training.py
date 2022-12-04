@@ -28,7 +28,7 @@ sum_loss = 0.0
 batch_count = 0
 
 tmp_showerthoughts_tens = None
-dataset = ShowerthoughtDataset()
+dataset = ShowerthoughtDataset(showerthoughts_dataset_path = '../data')
 thoughts_loader = DataLoader(dataset, batch_size=1, shuffle=True)
 
 
