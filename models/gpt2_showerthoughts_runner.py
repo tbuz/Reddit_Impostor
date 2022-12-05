@@ -8,11 +8,15 @@ from utils import Constants
 
 MODEL_EPOCH = input('Enter which EPOCH you would like to use: ')
 
-models_folder = "checkpoints"
+models_folder = Constants.checkpoints_folder
+
+# Comment out this line if you want to use a GPU
+map_location=torch.device('cpu')
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-medium')
-model_path = os.path.join(models_folder, f"gpt2_medium_showerthought_{MODEL_EPOCH}.pt")
-model = GPT2LMHeadModel.from_pretrained(torch.load(model_path))
+model_path = os.path.join(models_folder, f"gpt2_medium_showerthought_3.pt")
+model = GPT2LMHeadModel.from_pretrained('gpt2-medium')
+model.load_state_dict(torch.load(model_path, map_location=map_location))
 
 showerthoughts_output_file_path = f'generated_showerthoughts_{MODEL_EPOCH}.txt'
 
@@ -33,7 +37,6 @@ thoughts_num = 0
 with torch.no_grad():
     
     for thought_idx in range(100):
-        
         thought_finished = False
         cur_ids = torch.tensor(tokenizer.encode("<|showerthought|>")).unsqueeze(0).to(Constants.device)
         
@@ -53,12 +56,9 @@ with torch.no_grad():
                 break
         
         if thought_finished:
-                
-            thought_num = thought_num + 1
-            
+            thoughts_num = thoughts_num + 1
             output_list = list(cur_ids.squeeze().to('cpu').numpy())
             output_text = tokenizer.decode(output_list)
-
             with open(showerthoughts_output_file_path, 'a') as f:
                 f.write(f"{output_text} \n\n")
             
