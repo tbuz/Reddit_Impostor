@@ -32,13 +32,14 @@ Especially keywords are particularly interesting for our use case. This does not
 
 This technique is straightforward. We compare the word count of our generated posts to the ones of the target subreddit.
 
-- No library/algorithm needed.
+- Simple Python script
 
 ### Word Frequency
 
 The word frequency analysis is similar to [Keyword Extraction](#keyword-extraction): We want to identify frequent words and compare whether these words match with the posts of our target subreddit. However, instead of using heavy algorithms from large libraries like in [Keyword Extraction](#keyword-extraction), we will use an index for the word count.
 
-- No library/algorithm needed.
+- Simple Python script
+- [sk-learn: CountVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html)
 
 ### Embedding Comparison
 
@@ -46,6 +47,7 @@ The analysis of word embeddings is particularly interesting. We assume that the 
 
 - [Gensim](https://radimrehurek.com/gensim/): A library for topic modelling, document indexing and similarity retrieval with large corpora.
   - [Document similarity queries](https://radimrehurek.com/gensim/similarities/docsim.html)
+- [SBERT](https://www.sbert.net/): Transformer-based embeddings.
 
 ## Human Evaluation
 
