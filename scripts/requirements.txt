@@ -2,3 +2,4 @@ ndjson
 prettytable
 progress
 requests
+python-dotenv
