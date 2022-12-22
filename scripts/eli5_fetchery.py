@@ -41,13 +41,10 @@ def get_reddit_api_token():
             'password': os.environ.get('PASSWORD')
         }
     headers = {'User-Agent': 'RecentTrends/0.0.1'}
-    print(auth)
-    print(data)
 
     # Send request to access token endpoint
     res = requests.post('https://www.reddit.com/api/v1/access_token', auth=auth, data=data, headers=headers)
     
-    print(res.json())
     reddit_api_token = res.json()['access_token']
     reddit_api_token_expires_at = time.time() + (res.json()['expires_in'] / 2)
     return reddit_api_token
@@ -64,6 +61,8 @@ def get_comments_for_postid(id):
     answers = []
     data = json.loads(response.text)
     for comment in data[1]['data']['children']:
+        if comment['kind'] == 'more':
+            continue
         answers.append({
             'body': comment['data']['body'],
             'ups': comment['data']['ups']
@@ -75,7 +74,6 @@ def isPostValid(post):
     if 'removed_by_category' in post and post['removed_by_category'] != None:
         return False
     if post['selftext'] != '':
-        print(post['selftext'])
         return False
     if "post_hint" in post and post["post_hint"] == "image":
         return False
@@ -87,7 +85,6 @@ while datetime.now() - last_date < timedelta(days=time_period):
     while True:
         response = requests.get('https://api.pushshift.io/reddit/search/submission', params=params)
         # If we get rate limited, wait 30 seconds and try again
-        print(f'response is: {response}')
         if response.status_code == 429:
             time.sleep(30)
         else:
@@ -95,7 +92,6 @@ while datetime.now() - last_date < timedelta(days=time_period):
 
     data = json.loads(response.text)
     posts = data['data']
-    print(f'len of posts is {len(posts)}')
     # If there are no more posts, stop the loop
     if len(posts) == 0:
         break
@@ -120,9 +116,8 @@ while datetime.now() - last_date < timedelta(days=time_period):
             }
         )
         time.sleep(1)
-    print(invalid)
-    print(postsWithAnswers)
 
+    print('Writing posts into file...')
     # Write the data to a file
     with open(f'{data_dir}/{subreddit}.ndjson', 'a') as f:
         # If we already have some data, we need to insert a newline
