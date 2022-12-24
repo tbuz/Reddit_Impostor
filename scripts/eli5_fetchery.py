@@ -59,7 +59,13 @@ def get_comments_for_postid(id):
         return []
     
     answers = []
-    data = json.loads(response.text)
+    try:
+        data = json.loads(response.text)
+    except:
+        print('Reddit API returned an unexpected response body')
+        print(f'Response body: {response.text}')
+        return []
+    
     for comment in data[1]['data']['children']:
         if comment['kind'] == 'more':
             continue
@@ -85,12 +91,22 @@ while datetime.now() - last_date < timedelta(days=time_period):
     while True:
         response = requests.get('https://api.pushshift.io/reddit/search/submission', params=params)
         # If we get rate limited, wait 30 seconds and try again
-        if response.status_code == 429:
+        if response.status_code != 200:
+            print('Request failed, sending another one in 30 secs...')
+            print(f'Request code was {response.status_code}')
             time.sleep(30)
         else:
             break
+    
+    try:
+        data = json.loads(response.text)
+    except:
+        print('Parsing JSON from pushshift response failed')
+        print(f'Response headers: {response.headers}')
+        print(f'Response body: {response.text}')
+        print(f'Response status code: {response.text}')
 
-    data = json.loads(response.text)
+
     posts = data['data']
     # If there are no more posts, stop the loop
     if len(posts) == 0:
