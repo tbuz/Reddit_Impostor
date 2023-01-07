@@ -26,8 +26,8 @@
   - ~~BERT / Transformers~~
   - ~~T5~~
   - ~~XLNet~~
-- Research: Related research on social media bots, text style transfer, Reddit communities, ...
-  - Use sources like: Google Scholar, Towardsdatascience, etc.
+- ~~Research: Related research on social media bots, text style transfer, Reddit communities, ...~~
+  - ~~Use sources like: Google Scholar, Towardsdatascience, etc.~~
 - ~~Research & brainstorm: How to evaluate the success of a generated post?~~
   - ~~How do other researchers measure similar tasks?~~
   - ~~Kind of a "Turing Test" - Survey with 10 real and 10 fake posts~~
@@ -37,7 +37,7 @@
   - spacy for embeddings, NER, sentiment analysis, etc. (powerful package) https://spacy.io/
   - SBERT (pre-trained)
   - Is VADER sentiment analysis helpful?
-- Decide on two types of subreddits to work with: easy subreddits (e.g. Jokes, Showerthoughts), and difficult ones (e.g. WritingPrompts, ELI5)
+- ~~Decide on two types of subreddits to work with: easy subreddits (e.g. Jokes, Showerthoughts), and difficult ones (e.g. WritingPrompts, ELI5)~~
 
 ## 2. Dataset Acquisition & Exploration
 
@@ -48,18 +48,17 @@
 - ~~Pushshift API => Build a script to access the API~~
 - ~~Compare different subreddits (avg word length, how much facts vs. story?, links or selftext, etc) => create table~~
 - Dataset preprocessing
-  - Filter out irrelevant data
-  - Filter out deleted posts?
-  - Normalize data
+  - ~~Filter out irrelevant data~~
+  - ~~Filter out deleted posts?~~
+  - ~~Normalize data~~
   - Filter out duplicates?
     - This will be hard to find. Maybe it would work to search for posts of the same author within in a small period of time
 
 ## 3. Model Exploration / Training / Fine-Tuning & Testing
 
-- https://huggingface.co/models for model options
-- Implement pre-trained models
-- How to fine-tune a Language Model like BERT?
-- Test pre-trained Text Generation models on specific tasks (e.g. generate joke, showerthought, etc.)
+- ~~Implement pre-trained models~~
+- ~~How to fine-tune a Language Model like BERT?~~
+- ~~Test pre-trained Text Generation models on specific tasks (e.g. generate joke, showerthought, etc.)~~
 - Test pre-trained models on more difficult taks (e.g., explainlikeimfive or write story from prompt)
 
 ## 4. Evaluation
