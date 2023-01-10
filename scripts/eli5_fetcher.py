@@ -63,7 +63,7 @@ def get_comments_for_postid(id):
     # Add authorization to our headers dictionary
     headers = {
         **reddit_api_user_agent_header,
-        'Authorization': f"bearer {get_reddit_api_token()}"
+        'Authorization': f"Bearer {get_reddit_api_token()}"
     }
     url = f'https://oauth.reddit.com/comments/{id}?sort=top&depth=1&limit=5'
 
@@ -123,6 +123,7 @@ while datetime.now() - last_date < timedelta(days=time_period):
     posts = data['data']
     # If there are no more posts, stop the loop
     if len(posts) == 0:
+        print('No more posts found')
         break
 
     # Get the date of the last post
@@ -137,9 +138,9 @@ while datetime.now() - last_date < timedelta(days=time_period):
         except PostDeletedException:
             continue
         postsWithAnswers.append({ **post, 'answers': answers })
-        # Currently pushshift allows 30 requests per minute
-        # Therefore, we need to wait 2 seconds between requests
-        time.sleep(2)
+        # Currently pushshift allows 60 requests per minute
+        # Therefore, we need to wait 1 seconds between requests
+        time.sleep(1)
 
     # Write the data to a file
     with open(f'{data_dir}/{subreddit}.ndjson', 'a') as f:
