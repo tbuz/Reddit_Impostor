@@ -3,7 +3,7 @@ import os
 import torch
 from data_classes.showerthought_dataset import ShowerthoughtDataset
 from torch.utils.data import DataLoader
-from transformers import (AdamW, AutoModelForCausalLM, AutoTokenizer,
+from transformers import (AdamW, AutoTokenizer, GPTJForCausalLM,
                           get_linear_schedule_with_warmup)
 from utils import Constants, bootstrap
 
@@ -17,7 +17,13 @@ MAX_SEQ_LEN = 400
 bootstrap()
 
 tokenizer = AutoTokenizer.from_pretrained('EleutherAI/gpt-j-6B')
-model = AutoModelForCausalLM.from_pretrained('EleutherAI/gpt-j-6B')
+model = GPTJForCausalLM.from_pretrained('EleutherAI/gpt-j-6B')
+
+model.parallelize({
+        0: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+        1: [14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27],
+    })
+
 model = model.to(Constants.device)
 model.train()
 optimizer = AdamW(model.parameters(), lr=LEARNING_RATE)
