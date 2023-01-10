@@ -8,6 +8,11 @@ import requests
 from dotenv import load_dotenv
 from progress.bar import Bar
 
+
+class PostDeletedException(Exception):
+    "Raised when the post was deleted"
+    pass
+
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 # Create data output directory if it doesn't exist
@@ -20,7 +25,7 @@ subreddit = 'explainlikeimfive'
 time_period = int(input('🕒 For what time period do you want to fetch data? (in days): '))
 
 # Store information for subsequent requests
-params = { 'subreddit': subreddit, 'size': 500, 'sort': 'created_utc'}
+params = { 'subreddit': subreddit, 'size': 500, 'sort': 'created_utc' }
 last_date = datetime.now()
 
 # Create a progress bar and show it immediately
@@ -29,21 +34,22 @@ bar.start()
 
 reddit_api_token = ''
 reddit_api_token_expires_at = 0
+reddit_api_user_agent_header = { 'User-Agent': f"RecentTrends:v0.0.1 (by /u/{os.environ.get('USERNAME')})" }
 
 def get_reddit_api_token():
-    global reddit_api_token, reddit_api_token_expires_at 
+    global reddit_api_token, reddit_api_token_expires_at, reddit_api_user_agent_header
     
     if reddit_api_token_expires_at > time.time():
         return reddit_api_token
     auth = requests.auth.HTTPBasicAuth(os.environ.get('CLIENT_ID'), os.environ.get('SECRET_TOKEN'))
-    data = {'grant_type': 'password',
-            'username': os.environ.get('USERNAME'),
-            'password': os.environ.get('PASSWORD')
-        }
-    headers = {'User-Agent': 'RecentTrends/0.0.1'}
+    data = {
+        'grant_type': 'password',
+        'username': os.environ.get('USERNAME'),
+        'password': os.environ.get('PASSWORD')
+    }
 
     # Send request to access token endpoint
-    res = requests.post('https://www.reddit.com/api/v1/access_token', auth=auth, data=data, headers=headers)
+    res = requests.post('https://www.reddit.com/api/v1/access_token', auth=auth, data=data, headers=reddit_api_user_agent_header)
     
     reddit_api_token = res.json()['access_token']
     reddit_api_token_expires_at = time.time() + (res.json()['expires_in'] / 2)
@@ -51,21 +57,33 @@ def get_reddit_api_token():
 
 
 def get_comments_for_postid(id):
-    # Add authorization to our headers dictionary
-    headers = {**{'Authorization': f"bearer {get_reddit_api_token()}"}}
-    url = f'https://oauth.reddit.com/comments/{id}?sort=top&depth=1&limit=5'
-    response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        return []
-    
+    global reddit_api_user_agent_header
     answers = []
+
+    # Add authorization to our headers dictionary
+    headers = {
+        **reddit_api_user_agent_header,
+        'Authorization': f"bearer {get_reddit_api_token()}"
+    }
+    url = f'https://oauth.reddit.com/comments/{id}?sort=top&depth=1&limit=5'
+
+    while True:
+        response = requests.get(url, headers=headers)
+        # If we get rate limited, wait 30 seconds and try again
+        if response.status_code != 200:
+            time.sleep(30)
+        else:
+            break
+
     try:
         data = json.loads(response.text)
     except:
         print('Reddit API returned an unexpected response body')
-        print(f'Response body: {response.text}')
-        return []
-    
+
+    # Check if the post has been removed
+    if data[0]['data']['children'][0]['data']['removed_by_category'] is None:
+        raise PostDeletedException
+
     for comment in data[1]['data']['children']:
         if comment['kind'] == 'more':
             continue
@@ -73,6 +91,7 @@ def get_comments_for_postid(id):
             'body': comment['data']['body'],
             'ups': comment['data']['ups']
         })
+
     return answers
 
 
@@ -92,8 +111,6 @@ while datetime.now() - last_date < timedelta(days=time_period):
         response = requests.get('https://api.pushshift.io/reddit/search/submission', params=params)
         # If we get rate limited, wait 30 seconds and try again
         if response.status_code != 200:
-            print('Request failed, sending another one in 30 secs...')
-            print(f'Request code was {response.status_code}')
             time.sleep(30)
         else:
             break
@@ -102,10 +119,6 @@ while datetime.now() - last_date < timedelta(days=time_period):
         data = json.loads(response.text)
     except:
         print('Parsing JSON from pushshift response failed')
-        print(f'Response headers: {response.headers}')
-        print(f'Response body: {response.text}')
-        print(f'Response status code: {response.text}')
-
 
     posts = data['data']
     # If there are no more posts, stop the loop
@@ -116,24 +129,18 @@ while datetime.now() - last_date < timedelta(days=time_period):
     new_date = datetime.fromtimestamp(posts[-1]['created_utc'])
     
     postsWithAnswers = []
-    invalid = 0
     for post in posts:
         if not isPostValid(post):
-            invalid += 1
             continue
-        answers = get_comments_for_postid(post['id'])
-        postsWithAnswers.append(
-            {
-                'author': post['author'],
-                'url': post['url'],
-                'id': post['id'],
-                'title': post['title'],
-                'answers': answers
-            }
-        )
-        time.sleep(1)
+        try:
+            answers = get_comments_for_postid(post['id'])
+        except PostDeletedException:
+            continue
+        postsWithAnswers.append({ **post, 'answers': answers })
+        # Currently pushshift allows 30 requests per minute
+        # Therefore, we need to wait 2 seconds between requests
+        time.sleep(2)
 
-    print('Writing posts into file...')
     # Write the data to a file
     with open(f'{data_dir}/{subreddit}.ndjson', 'a') as f:
         # If we already have some data, we need to insert a newline
