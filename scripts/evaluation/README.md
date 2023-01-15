@@ -1,0 +1,2 @@
+- Install dependencies from `requirements.txt`
+- Execute `python -m nltk.downloader all`
