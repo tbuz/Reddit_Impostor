@@ -1,2 +1,2 @@
 #!/bin/#!/bin/bash
-docker run -it --gpus "device=0" -v "$(pwd)":/workspace -v "/home/ngenchev/.cache":"/root/.cache" -w /workspace --rm --shm-size=128g --ulimit memlock=-1 --ulimit stack=67108864 --net=host benjaminfrost99/reddit_impostor:latest bash
+docker run -it --gpus "device=0" -v "$(pwd)":"/workspace/Reddit_Impostor" -v "/home/ngenchev/.cache":"/root/.cache" -w /workspace --rm --shm-size=128g --ulimit memlock=-1 --ulimit stack=67108864 --net=host benjaminfrost99/reddit_impostor:latest bash
