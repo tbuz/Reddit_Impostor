@@ -5,13 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: GPT-J",
+      "name": "Python: sbert-similarity",
       "type": "python",
       "request": "launch",
-      "program": "gptj_showerthoughts_training.py",
+      "program": "sbert_similarity.py",
       "console": "integratedTerminal",
       "justMyCode": true,
-      "cwd": "${workspaceFolder}/models"
+      "cwd": "${workspaceFolder}/scripts/evaluation"
     }
   ]
 }

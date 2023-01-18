@@ -9,7 +9,7 @@
 		"--ipc=host"
 	],
 	"mounts": [
-		"/scratch1/.cache:/root/.cache"
+		// "/scratch1/.cache:/root/.cache"
 	]
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
