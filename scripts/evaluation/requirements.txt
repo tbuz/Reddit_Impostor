@@ -2,3 +2,6 @@ nltk
 unidecode
 gensim
 scikit-learn
+sentence_transformers
+seaborn
+pandas

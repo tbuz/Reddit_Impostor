@@ -2,26 +2,72 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.manifold import TSNE
 from sklearn.cluster import OPTICS
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import ndjson
+import json
+import os
 
+
+FILE1 = os.path.join('..', '..', 'data', 'Showerthoughts-small.ndjson') # PATH to file 1
+FILE2 = os.path.join('..', '..', 'data', 'generated_showerthoughts_3.txt')
+
+def __isPostValid(post):
+  if 'removed_by_category' in post:
+      return False
+  if post['selftext'] != '':
+      return False
+  if "post_hint" in post and post["post_hint"] == "image":
+      return False
+  return True
+
+showerthought_list = []
+
+with open(FILE1) as f:
+  reader = ndjson.reader(f)
+  try:
+    for post in reader:
+      if __isPostValid(post):
+        showerthought_str = post['title']
+        showerthought_list.append(showerthought_str)
+  except json.JSONDecodeError:
+    pass
+
+with open(FILE2) as f:
+  lines = filter(None, (line.rstrip() for line in f))
+  cleanSentences = list(map(lambda x: x.replace('<|showerthought|>', '').replace('<|endoftext|>', ''), lines))
+
+np.random.seed(100)
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-#Our sentences we like to encode
-sentences = ['The quick fox jumps over the lazy cat',
-    'The quick fox jumps over the lazy cat',
-    'The quick brown fox jumps over the lazy dog.']
-
 #Sentences are encoded by calling model.encode()
-embeddings = model.encode(sentences)
-
-similarity_array = cosine_similarity([embeddings[0]], embeddings[1:])
-print(similarity_array)
+embeddings = model.encode(showerthought_list)
 
 n_components = 2
 tsne = TSNE(n_components=n_components)
 tsne_result = tsne.fit_transform(embeddings)
-print(tsne_result.shape)
 
-optics_clustering = OPTICS(min_samples=3).fit(tsne_result)
-print(optics_clustering.labels_)
+optics_clustering = OPTICS(min_samples=5, min_cluster_size=0.005).fit(tsne_result)
+
+df = pd.DataFrame()
+df['x'] = tsne_result[:,0]
+df['y'] = tsne_result[:,1]
+df['clustering'] = optics_clustering.labels_
+
+amountOfUnclusteredElements = 0
+for index, row in df.iterrows():
+  if row['clustering'] == -1:
+    amountOfUnclusteredElements += 1
+    df.drop(index, inplace=True)
+
+sns.scatterplot(x='x', y='y', data=df, hue='clustering', palette=sns.color_palette('hls', optics_clustering.labels_.max() + 1), legend=False)
+plt.savefig('plot.png')
+
+print(f"Identified clusters: {optics_clustering.labels_.max() + 1}")
+print(f"Amount of sentences that weren't clustered: {amountOfUnclusteredElements} out of {len(showerthought_list)}")
+
+
 
     
