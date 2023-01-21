@@ -43,7 +43,7 @@ np.random.seed(100)
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 #Sentences are encoded by calling model.encode()
-embeddings = model.encode(showerthought_list)
+embeddings = model.encode([*showerthought_list[:100], *cleanSentences])
 
 n_components = 2
 tsne = TSNE(n_components=n_components)
@@ -55,6 +55,7 @@ df = pd.DataFrame()
 df['x'] = tsne_result[:,0]
 df['y'] = tsne_result[:,1]
 df['clustering'] = optics_clustering.labels_
+df['datasets'] = np.concatenate((np.zeros(100, dtype=int), np.ones(100, dtype=int)))
 
 amountOfUnclusteredElements = 0
 for index, row in df.iterrows():
@@ -62,11 +63,11 @@ for index, row in df.iterrows():
     amountOfUnclusteredElements += 1
     df.drop(index, inplace=True)
 
-sns.scatterplot(x='x', y='y', data=df, hue='clustering', palette=sns.color_palette('hls', optics_clustering.labels_.max() + 1), legend=False)
+sns.scatterplot3d(x='x', y='y',z='datasets', data=df, hue='clustering', palette=sns.color_palette('hls', optics_clustering.labels_.max() + 1), legend=False)
 plt.savefig('plot.png')
 
 print(f"Identified clusters: {optics_clustering.labels_.max() + 1}")
-print(f"Amount of sentences that weren't clustered: {amountOfUnclusteredElements} out of {len(showerthought_list)}")
+print(f"Amount of sentences that weren't clustered: {amountOfUnclusteredElements} out of {embeddings.shape[0]}")
 
 
 
