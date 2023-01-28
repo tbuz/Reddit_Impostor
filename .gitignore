@@ -1,5 +1,5 @@
 data/
-
+temp/
 models/checkpoints/
 
 **/__pycache__
