@@ -1,5 +1,7 @@
 ndjson
 prettytable
 progress
-requests
 python-dotenv
+requests
+tqdm
+zstandard
