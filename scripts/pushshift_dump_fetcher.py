@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 
@@ -47,8 +48,9 @@ for year in range(fetch_from[0], fetch_to[0] + 1):
     with open(output_path[:-4] + '.ndjson', 'r') as input_f:
       with open(os.path.join(data_dir, f'{subreddit}.ndjson'), 'a') as output_f:
         for line in input_f:
-          if line.find(f'"subreddit":"{subreddit}"') != -1:
-            output_f.write(line)          
+          data = json.loads(line)
+          if data['subreddit'] == subreddit:
+            output_f.write(line)      
     
     # Delete temp files
     os.remove(output_path)
