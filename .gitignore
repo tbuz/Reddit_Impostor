@@ -11,4 +11,4 @@ models/checkpoints/
 **/wandb/
 *.svg
 *.png
-*csv
+*.csv

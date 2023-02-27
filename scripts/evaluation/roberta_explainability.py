@@ -34,8 +34,9 @@ cls_explainer = SequenceClassificationExplainer(
     tokenizer)
 
 realCounter = {}
+realCounterTotal = 0
 fakeCounter = {}
-
+fakeCounterTotal = 0
 for post in tqdm(data):
   word_attributions = cls_explainer(post['title'])
   word_attributions.sort(key=lambda x: x[1], reverse=True)
@@ -43,24 +44,23 @@ for post in tqdm(data):
   if cls_explainer.predicted_class_index == 0: # generated class has an index of 0
     for entry in top4:
       if not entry[0] in fakeCounter:
-        fakeCounter[entry[0]] = []
-      fakeCounter[entry[0]].append(entry[1])
-      for key in fakeCounter:
-        if not key == entry[0]:
-          fakeCounter[key].append(0)
+        fakeCounter[entry[0]] = 0
+      fakeCounterTotal += 1
+      fakeCounter[entry[0]] += entry[1]
+     
   else: 
     for entry in top4:
       if not entry[0] in realCounter:
-        realCounter[entry[0]] = []
-      realCounter[entry[0]].append(entry[1])
-      for key in realCounter:
-        if not key == entry[0]:
-          realCounter[key].append(0)
+        realCounter[entry[0]] = 0
+      realCounterTotal += 1
+      realCounter[entry[0]] += entry[1]
       
 for key in fakeCounter:
-  fakeCounter[key] = np.average(fakeCounter[key])
+  fakeCounter[key] = (fakeCounter[key] / fakeCounterTotal)
+
 for key in realCounter:
-  realCounter[key] = np.average(realCounter[key])
+  realCounter[key] = (realCounter[key] / realCounterTotal)
+
 
 #sort them
 fakeCounter = sorted(fakeCounter.items(), key=lambda item: item[1], reverse=True)
@@ -70,12 +70,14 @@ realCounter = sorted(realCounter.items(), key=lambda item: item[1], reverse=True
 fakeCounterDf = pd.DataFrame(fakeCounter[:10])
 # 0 - the keys of the dict, 1 - the values
 x = sns.barplot(fakeCounterDf, x=0, y=1)
-x.set(title="Top contributers to generated class")
-plt.savefig('generated_contributers.svg')
+x.set(title="Top contributers to the generated class")
+plt.savefig('generated_contributers_norm_training.svg')
+plt.close()
 
 realCounterDf = pd.DataFrame(realCounter[:10])
 # 0 - the keys of the dict, 1 - the values
 x = sns.barplot(realCounterDf, x=0, y=1)
-x.set(title="Top contributers to genuine class")
-plt.savefig('genuine_contributers.svg')
+x.set(title="Top contributers to the genuine class")
+plt.savefig('genuine_contributers_norm_training.svg')
+plt.close()
 

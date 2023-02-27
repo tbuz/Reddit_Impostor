@@ -41,6 +41,15 @@
       "cwd": "${workspaceFolder}/scripts/evaluation"
     },
     {
+      "name": "additional survey",
+      "type": "python",
+      "request": "launch",
+      "program": "survey_additional_evaluation.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/scripts/evaluation"
+    },
+    {
       "name": "Clusters subreddits",
       "type": "python",
       "request": "launch",
