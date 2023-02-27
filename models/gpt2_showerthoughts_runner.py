@@ -1,5 +1,5 @@
 import os
-
+from tqdm import tqdm
 import numpy as np
 import torch
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
@@ -14,7 +14,7 @@ models_folder = Constants.checkpoints_folder
 map_location=torch.device('cpu')
 
 tokenizer = GPT2Tokenizer.from_pretrained('gpt2-medium')
-model_path = os.path.join(models_folder, f"gpt2_medium_showerthought_3.pt")
+model_path = os.path.join(models_folder, f"gpt2_medium_showerthought_4.pt")
 model = GPT2LMHeadModel.from_pretrained('gpt2-medium')
 model.load_state_dict(torch.load(model_path, map_location=map_location))
 
@@ -36,7 +36,7 @@ def choose_from_top(probs, n=5):
 thoughts_num = 0
 with torch.no_grad():
     
-    for thought_idx in range(100):
+    for thought_idx in tqdm(range(5000)):
         thought_finished = False
         cur_ids = torch.tensor(tokenizer.encode("<|showerthought|>")).unsqueeze(0).to(Constants.device)
         
@@ -61,4 +61,4 @@ with torch.no_grad():
             output_text = tokenizer.decode(output_list)
             with open(showerthoughts_output_file_path, 'a') as f:
                 f.write(f"{output_text} \n\n")
-            
+    

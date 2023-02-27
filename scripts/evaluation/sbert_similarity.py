@@ -63,8 +63,8 @@ for index, row in df.iterrows():
     amountOfUnclusteredElements += 1
     df.drop(index, inplace=True)
 
-sns.scatterplot3d(x='x', y='y',z='datasets', data=df, hue='clustering', palette=sns.color_palette('hls', optics_clustering.labels_.max() + 1), legend=False)
-plt.savefig('plot.png')
+sns.scatterplot3d(x='x', y='y',z='datasets', data=df, hue='datasets', palette=sns.color_palette('hls', 2), legend=True)
+plt.savefig('plot.svg')
 
 print(f"Identified clusters: {optics_clustering.labels_.max() + 1}")
 print(f"Amount of sentences that weren't clustered: {amountOfUnclusteredElements} out of {embeddings.shape[0]}")

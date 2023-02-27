@@ -5,3 +5,8 @@ scikit-learn
 sentence_transformers
 seaborn
 pandas
+plotly
+textstat
+language-tool-python
+transformers-interpret
+ferret-xai

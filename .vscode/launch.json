@@ -5,12 +5,75 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: sbert-similarity",
+      "name": "Python: GPT-Neo-new",
       "type": "python",
       "request": "launch",
-      "program": "sbert_similarity.py",
+      "program": "gpt_neo_new_training.py",
       "console": "integratedTerminal",
       "justMyCode": true,
+      "cwd": "${workspaceFolder}/models"
+    },
+    {
+      "name": "Python: GPT-Neo",
+      "type": "python",
+      "request": "launch",
+      "program": "gpt_neo_showerthoughts_training.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/models"
+    },
+    {
+      "name": "Plotly",
+      "type": "python",
+      "request": "launch",
+      "program": "plotly_similarity.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/scripts/evaluation"
+    },
+    {
+      "name": "survey",
+      "type": "python",
+      "request": "launch",
+      "program": "survey.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/scripts/evaluation"
+    },
+    {
+      "name": "Clusters subreddits",
+      "type": "python",
+      "request": "launch",
+      "program": "clusters_different_subreddits.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/scripts/evaluation"
+    },
+    {
+      "name": "Roberta training",
+      "type": "python",
+      "request": "launch",
+      "program": "roberta_training.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/models"
+    },
+    {
+      "name": "Roberta evaluation",
+      "type": "python",
+      "request": "launch",
+      "program": "roberta_validation.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}/models"
+    },
+    {
+      "name": "Roberta test",
+      "type": "python",
+      "request": "launch",
+      "program": "test.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
       "cwd": "${workspaceFolder}/scripts/evaluation"
     }
   ]

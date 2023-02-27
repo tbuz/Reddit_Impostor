@@ -5,3 +5,10 @@ models/checkpoints/
 **/__pycache__
 
 .env
+**/.hypothesis
+**/logs/
+**/tmp/
+**/wandb/
+*.svg
+*.png
+*csv

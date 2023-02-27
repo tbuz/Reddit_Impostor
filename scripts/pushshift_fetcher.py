@@ -17,7 +17,7 @@ subreddit = input('👋 Hello there! Please, enter a subreddit: r/')
 time_period = int(input('🕒 For what time period do you want to fetch data? (in days): '))
 
 # Store information for subsequent requests
-params = { 'subreddit': subreddit, 'size': 500, 'sort': 'created_utc:desc' }
+params = { 'subreddit': subreddit, 'size': 500, 'sort': 'created_utc' }
 last_date = datetime.now()
 
 # Create a progress bar and show it immediately
