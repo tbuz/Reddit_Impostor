@@ -158,6 +158,10 @@ conditions = [
   ('How old are you?', '26-30'),
   ('How old are you?', '31-40'),
   ('How old are you?', '41-55'),
+  ('How often do you visit Reddit?', 'Never'),
+  ('How often do you visit Reddit?', 'Rarely'),
+  ('How often do you visit Reddit?', 'Weekly'),
+  ('How often do you visit Reddit?', 'Daily'),
 ]
 for idx, condition in enumerate(conditions):
   workingDfA = dfA if idx == 0 else dfA[dfA[condition[0]] == condition[1]]
@@ -166,28 +170,28 @@ for idx, condition in enumerate(conditions):
   for criteria in criterias:
     realILike = []
     for item in realSurveyA:
-      realILike = [*realILike, *filter(lambda x: x != 4 and x != 3, (workingDfA[f"{item} [{criteria}]"].values))]
+      realILike = [*realILike, *(workingDfA[f"{item} [{criteria}]"].values)]
     for item in realSurveyB:
-      realILike = [*realILike, *filter(lambda x: x != 4 and x != 3, (workingDfB[f"{item} [{criteria}]"].values))]
+      realILike = [*realILike, *(workingDfB[f"{item} [{criteria}]"].values)]
 
       
     neoILike = []
     for item in neoA:
-      neoILike = [*neoILike, *filter(lambda x: x!= 4 and x!= 3, (workingDfA[f"{item} [{criteria}]"].values))]
+      neoILike = [*neoILike, *(workingDfA[f"{item} [{criteria}]"].values)]
     for item in neoB:
-      neoILike = [*neoILike, *filter(lambda x: x != 4 and x != 3, (workingDfB[f"{item} [{criteria}]"].values))]
+      neoILike = [*neoILike, *(workingDfB[f"{item} [{criteria}]"].values)]
       
     chatILike = []
     for item in chatA:
-      chatILike = [*chatILike, *filter(lambda x: x!= 4 and x!= 3, (workingDfA[f"{item} [{criteria}]"].values))]
+      chatILike = [*chatILike, *(workingDfA[f"{item} [{criteria}]"].values)]
     for item in chatB:
-      chatILike = [*chatILike, *filter(lambda x: x != 4 and x != 3, (workingDfB[f"{item} [{criteria}]"].values))]
+      chatILike = [*chatILike, *(workingDfB[f"{item} [{criteria}]"].values)]
 
     gpt2ILike = []
     for item in gpt2A:
-      gpt2ILike = [*gpt2ILike, *filter(lambda x: x!= 4 and x!= 3, (workingDfA[f"{item} [{criteria}]"].values))]
+      gpt2ILike = [*gpt2ILike, *(workingDfA[f"{item} [{criteria}]"].values)]
     for item in gpt2B:
-      gpt2ILike = [*gpt2ILike, *filter(lambda x: x != 4 and x != 3, (workingDfB[f"{item} [{criteria}]"].values))]
+      gpt2ILike = [*gpt2ILike, *(workingDfB[f"{item} [{criteria}]"].values)]
     
     temp = criteria + f" " + condition[1].replace(',', ' ')
     titleRow[0] = titleRow[0] + (temp, )
@@ -196,7 +200,7 @@ for idx, condition in enumerate(conditions):
     rows[2] = rows[2] + (np.average(chatILike) if len(chatILike) else 0,)
     rows[3] = rows[3] + (np.average(gpt2ILike) if len(gpt2ILike) else 0,)
 
-with open ('survey_additional_evaluation_certain_only.csv', 'w') as f:
+with open ('survey_additional_evaluation.csv', 'w') as f:
   wr = csv.writer(f)
   wr.writerows(titleRow)
   wr.writerows(rows)
