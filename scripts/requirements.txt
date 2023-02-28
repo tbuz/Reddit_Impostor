@@ -1,7 +1,0 @@
-ndjson
-prettytable
-progress
-python-dotenv
-requests
-tqdm
-zstandard

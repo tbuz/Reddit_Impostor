@@ -1,2 +1,1 @@
-- Install dependencies from `requirements.txt`
-- Execute `python -m nltk.downloader all`
+- Execute `python -m nltk.downloader all` for the `sentence_complexity.py` scipt

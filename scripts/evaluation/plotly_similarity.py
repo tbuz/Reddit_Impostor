@@ -106,6 +106,7 @@ del clustersDict[-1]
 # Add a topic column and set the topics initially to None
 df['topic'] = None
 
+# Uncomment if you want to add topics with TOPICBert
 # print('Adding topics...')
 # docs = fetch_20newsgroups(subset='all',  remove=('headers', 'footers', 'quotes'))['data']
 # topicModel = BERTopic(embedding_model=model) # use the same model that we use for creating the embeddings
@@ -126,6 +127,7 @@ df['topic'] = None
 # fig.show()
 # fig.write_html('plot.html')
 
+# If you want to color the different clusters use hue='clusters', palette=sns.color_palette('hls', optics_clustering.labels_.max() + 1)
 x = sns.scatterplot(x='x', y='y', data=df, s=5, hue='datasets', palette=sns.color_palette('hls',3), legend=True)
 x.set(title="Showerthoughts similarity")
 x.set(xlabel=None, ylabel=None, xticklabels=[], yticklabels=[])

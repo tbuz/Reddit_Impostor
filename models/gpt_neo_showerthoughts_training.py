@@ -36,7 +36,6 @@ tokenizer.padding_side = "left"
 # Define PAD Token = EOS Token = 50256
 tokenizer.pad_token = tokenizer.eos_token
 model = GPTNeoForCausalLM.from_pretrained('EleutherAI/gpt-neo-2.7B', torch_dtype=torch.float16)
-model.load_state_dict(torch.load('checkpoints/gpt_neo_showerthought_3.pt'))
 model.resize_token_embeddings(len(tokenizer))
 model.config.pad_token_id = tokenizer.eos_token_id
 
@@ -100,12 +99,9 @@ for epoch in range(EPOCHS):
         # The optimizer dictates the "update rule"--how the parameters are
         # modified based on their gradients, the learning rate, etc.
         optimizer.step()
-        # Update the learning rate.
-        # scheduler.step()
-        # wandb.log({"lr": scheduler._last_lr[0]})
-    
+        
     avg_epoch_loss = sum_loss / len(thoughts_loader)
     wandb.log({"avg_epoch_loss": avg_epoch_loss})
     print(f"\n Average epoch loss: {avg_epoch_loss} \n")        
     # Store the model on every epoch
-    torch.save(model.state_dict(), os.path.join(Constants.checkpoints_folder, f"gpt_neo_showerthought_{epoch + 4}.pt"))
+    torch.save(model.state_dict(), os.path.join(Constants.checkpoints_folder, f"gpt_neo_showerthought_{epoch}.pt"))
